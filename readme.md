@@ -1,23 +1,3 @@
-# abc
-
-`abc`
-
-_Italics_
-
-* abc
-
-```javascript
-hello
-
-```
----
-
->hi
-
-- hello
-
-
-
 # TAX CALCULATOR
 
 Calculate and apply basic sales tax for the products sold in a departmental store.
