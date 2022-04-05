@@ -95,7 +95,7 @@ This DELETE endpoint  deletes the record of a particular product.
 This GET endpoint displays the receiptId, productName, totalPrice, totalTax in JSON format.
 
 ```
-/store/id/{id}
+/store/id/{id}/
 ```
 
 ## GET
