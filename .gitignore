@@ -32,7 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 
-mvnw
-mvnw.cmd
-help.md
+/mvnw
+/mvnw.cmd
+/help.md
 
