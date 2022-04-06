@@ -27,7 +27,7 @@ a shelf price of p contains (np/100 rounded up to the nearest 0.05) amount of sa
 - **SQL**
 
 ___
-## Dependencies
+## Internal Dependencies
 
 * JDK 15.0.3
 * MySQL 8.0.27

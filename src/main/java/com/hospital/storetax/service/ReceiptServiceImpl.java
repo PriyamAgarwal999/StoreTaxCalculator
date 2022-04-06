@@ -46,6 +46,12 @@ public class ReceiptServiceImpl implements ReceiptService {
     public boolean checkIsProductImported(String productName) {
     	return productName.contains("Imported");
     }
+    
+    public boolean isProductPresent(String productName){
+    	ProductDetails product= productRepo.getByProductName(productName);
+    	System.out.println(product);
+    	return true;
+    }
 	
 	
 	
