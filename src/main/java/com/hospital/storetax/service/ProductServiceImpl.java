@@ -1,5 +1,7 @@
 package com.hospital.storetax.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.hospital.storetax.dao.ProductRepo;
 import com.hospital.storetax.details.ProductDetails;
+import com.hospital.storetax.details.ReceiptDetails;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -15,61 +18,114 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductRepo productRepo;
 	
-	  public boolean isProductPresent(ProductDetails newProduct){
+	//List of Medical Products
+	List<String> medicalProducts= new ArrayList<>(Arrays.asList("Medicine","Syringe","Paracetamol","Sanitizer"));
+	
+	//List of Food Products
+	List<String> foodProducts= new ArrayList<>(Arrays.asList("Chocolate","Biscuits","Ice Cream"));
+	
+	//Function to check if product is food item or not
+    public boolean checkIsProductFood(String productName){ //To prevent multiple dots i.e receipt.foodProducts.contains(productName)
+        return foodProducts.contains(productName);
+    }
+
+    //Function to check if product is medical item or not
+    public boolean checkIsProductMedical(String productName){
+        return medicalProducts.contains(productName);
+    }
+    
+    //Function to check if product is book or not
+    public boolean checkIsProductBook(String productName) {
+    	return productName.contains("Book");
+    }
+    
+    //Function to check if product is imported or not
+    public boolean checkIsProductImported(String productName) {
+    	return productName.contains("Imported");
+    }
+    
+    public boolean isProductPresent(String productName){
+    	ReceiptDetails product= productRepo.getByProductName(productName);
+    	System.out.println(product);
+    	return true;
+    }
+	
+	//Function to get total tax on the product
+	public double getTotalTax(ProductDetails newProduct) {
+		double totalTax=0;
+		String productName=newProduct.getProductName();
+		double productPrice=newProduct.getProductUnitPrice();
+		int productQuantity=newProduct.getProductQuantity();
+		if(checkIsProductImported(productName)) {
+			productName=productName.substring(9);
+			if(checkIsProductMedical(productName) || checkIsProductFood(productName) || checkIsProductBook(productName)) {
+				totalTax=productPrice*0.05*productQuantity;
+			}
+			else {
+				
+				totalTax=productPrice*0.15*productQuantity;
+			}
+		}
+		else {
+			if(!checkIsProductMedical(productName) && !checkIsProductFood(productName) && !checkIsProductBook(productName)) {
+				totalTax=productPrice*0.10*productQuantity;
+			}
+		}
+		totalTax=Math.round(totalTax *100)/100.00;
+		return totalTax;
+	}
+	
+	//Function to get totalPrice of the product
+	public double getTotalPrice(ProductDetails newProduct,double totalTax) {
+		double productPrice=newProduct.getProductUnitPrice();
+		int productQuantity=newProduct.getProductQuantity();
+		double totalPrice=(productPrice*productQuantity)+totalTax;
+		totalPrice=Math.round(totalPrice*100)/100.00;
+		return totalPrice;
+	}
+	
+	  public boolean isProductPresent(ReceiptDetails newProduct){
 	    	return productRepo.existsByProductName(newProduct.getProductName());
-//	    	if(product==true) {
-////	  		  System.out.println("hello");
-////	    		ProductDetails existingProduct=productRepo.getByProductName(name);
-////	    		int existingProductQuantity=existingProduct.getProductQuantity();
-////	    		int newProductQuantity=newProduct.getProductQuantity();
-////	    		int total=existingProductQuantity+newProductQuantity;
-////	    	existingProduct.setProductQuantity( total);
-//	    	return true;
-//	    	}
-//	    	System.out.println(product);
-//	    	return false;
 	    }
 	  
 
 	@Override
-	public List<ProductDetails> getAllProducts() {
+	public List<ReceiptDetails> getAllProducts() {
 		// TODO Auto-generated method stub
 		return productRepo.findAll();
 	}
-
-	@Override
-	public Optional<ProductDetails> getProductById(int productId) {
-		// TODO Auto-generated method stub
-		return productRepo.findById(productId);
+	
+	public ReceiptDetails setReceiptDetails(ProductDetails newProduct) {
+		ReceiptDetails receiptDetails=new ReceiptDetails();
+		String productName=newProduct.getProductName();
+		receiptDetails.setProductName(productName);
+		receiptDetails.setProductQuantity(newProduct.getProductQuantity());
+		receiptDetails.setProductUnitPrice(newProduct.getProductUnitPrice());
+		double totalTax=getTotalTax(newProduct);
+		System.out.println(totalTax);
+		receiptDetails.setProductTotalTax(totalTax);
+		double totalPrice=getTotalPrice(newProduct,totalTax);
+		receiptDetails.setProductTotalPrice(totalPrice);
+		return receiptDetails;
 	}
 
 	@Override
-	public ProductDetails addProduct(ProductDetails newProduct) {
-		// TODO Auto-generated method stub
-		if(isProductPresent(newProduct)==true) {	
-		ProductDetails existingProduct=productRepo.getByProductName(newProduct.getProductName());
+	public ReceiptDetails addProduct(ProductDetails newProduct) {
+		ReceiptDetails receiptDetails=setReceiptDetails(newProduct);
+		
+//		// TODO Auto-generated method stub
+		if(isProductPresent(receiptDetails)==true) {	
+		ReceiptDetails existingProduct=productRepo.getByProductName(newProduct.getProductName());
 		int existingProductQuantity=existingProduct.getProductQuantity();
 		int newProductQuantity=newProduct.getProductQuantity();
 		int total=existingProductQuantity+newProductQuantity;
 		System.out.println(total);
-	    existingProduct.setProductQuantity(6);  
+	    existingProduct.setProductQuantity(total);  
+	    productRepo.save(existingProduct);
 		}
 		else {
-		return productRepo.save(newProduct);
+		return productRepo.save(receiptDetails);
 		}
 		return null;
-	}
-
-	@Override
-	public ProductDetails updateProduct(ProductDetails updateProduct) {
-		// TODO Auto-generated method stub
-		return productRepo.save(updateProduct);
-	}
-
-	@Override
-	public void deleteProduct(int productId) {
-		// TODO Auto-generated method stub
-		ProductDetails productDeleted=productRepo.getById(productId);
-		 productRepo.delete(productDeleted);
-	}
+	}	
 }

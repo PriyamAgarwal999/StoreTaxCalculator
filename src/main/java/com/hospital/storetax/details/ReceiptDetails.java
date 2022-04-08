@@ -1,39 +1,48 @@
 package com.hospital.storetax.details;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class ReceiptDetails {
-	
+public class ReceiptDetails{
+
 	@Id
-	private int receiptId;
-	
+	@Column(name="productName",length=20)
 	private String productName;
-	private double totalPrice;
-	private double totalTax;
-	public int getReceiptId() {
-		return receiptId;
-	}
-	public void setReceiptId(int receiptId) {
-		this.receiptId = receiptId;
-	}
+	
+	private int productQuantity;
+	private double productUnitPrice;
+	private double productTotalPrice;
+	private double productTotalTax;
 	public String getProductName() {
 		return productName;
 	}
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	public double getTotalPrice() {
-		return totalPrice;
+	public int getProductQuantity() {
+		return productQuantity;
 	}
-	public void setTotalPrice(double totalPrice) {
-		this.totalPrice = totalPrice;
+	public void setProductQuantity(int productQuantity) {
+		this.productQuantity = productQuantity;
 	}
-	public double getTotalTax() {
-		return totalTax;
+	public double getProductUnitPrice() {
+		return productUnitPrice;
 	}
-	public void setTotalTax(double totalTax) {
-		this.totalTax = totalTax;
+	public void setProductUnitPrice(double productUnitPrice) {
+		this.productUnitPrice = productUnitPrice;
+	}
+	public double getProductTotalPrice() {
+		return productTotalPrice;
+	}
+	public void setProductTotalPrice(double productTotalPrice) {
+		this.productTotalPrice = productTotalPrice;
+	}
+	public double getProductTotalTax() {
+		return productTotalTax;
+	}
+	public void setProductTotalTax(double productTotalTax) {
+		this.productTotalTax = productTotalTax;
 	}
 }

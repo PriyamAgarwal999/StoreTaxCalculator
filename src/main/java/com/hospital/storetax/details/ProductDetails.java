@@ -1,22 +1,19 @@
 package com.hospital.storetax.details;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
+import org.springframework.stereotype.Component;
+
+@Component
 public class ProductDetails {
-	
-	@Id
-	private int productId;	
+
 	private String productName;
+	
 	private int productQuantity;
-	private double productPrice;
-	public int getProductId() {
-		return productId;
-	}
-	public void setProductId(int productId) {
-		this.productId = productId;
-	}
+	private double productUnitPrice;
+
 	public String getProductName() {
 		return productName;
 	}
@@ -29,10 +26,10 @@ public class ProductDetails {
 	public void setProductQuantity(int productQuantity) {
 		this.productQuantity = productQuantity;
 	}
-	public double getProductPrice() {
-		return productPrice;
+	public double getProductUnitPrice() {
+		return productUnitPrice;
 	}
-	public void setProductPrice(double productPrice) {
-		this.productPrice = productPrice;
+	public void setProductUnitPrice(double productUnitPrice) {
+		this.productUnitPrice = productUnitPrice;
 	}
 }
