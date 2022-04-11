@@ -119,9 +119,18 @@ public class ProductServiceImpl implements ProductService {
 		int existingProductQuantity=existingProduct.getProductQuantity();
 		int newProductQuantity=newProduct.getProductQuantity();
 		int total=existingProductQuantity+newProductQuantity;
-		System.out.println(total);
-	    existingProduct.setProductQuantity(total);  
-	    productRepo.save(existingProduct);
+//		System.out.println(total);
+	    existingProduct.setProductQuantity(total); 
+	    ProductDetails productDetails=new ProductDetails();
+	    productDetails.setProductName(existingProduct.getProductName());
+	    productDetails.setProductQuantity(total);
+	    productDetails.setProductUnitPrice(existingProduct.getProductUnitPrice());
+	    ReceiptDetails receipt=setReceiptDetails(productDetails);
+//	    int existingProductTotalTax=getTotalTax(existingProduct);
+//	    existingProduct.setProductTotalTax(existingProductTotalTax);
+//	    int existingProductTotalPrice=getTotalPrice(existingProduct)
+//	    existingProduct.setProductTotalPrice(total);
+	    productRepo.save(receipt);
 		}
 		else {
 		return productRepo.save(receiptDetails);
