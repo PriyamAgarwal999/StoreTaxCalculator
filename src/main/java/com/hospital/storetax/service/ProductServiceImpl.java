@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
     public boolean isProductPresent(String productName){
     	ReceiptDetails product= productRepo.getByProductName(productName);
     	System.out.println(product);
-    	return true;
+    	return product!=null;
     }
 	
 	//Function to get total tax on the product
