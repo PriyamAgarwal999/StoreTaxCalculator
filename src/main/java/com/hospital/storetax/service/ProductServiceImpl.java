@@ -3,8 +3,6 @@ package com.hospital.storetax.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +44,6 @@ public class ProductServiceImpl implements ProductService {
     
     public boolean isProductPresent(String productName){
     	ReceiptDetails product= productRepo.getByProductName(productName);
-    	System.out.println(product);
     	return product!=null;
     }
 	
@@ -62,7 +59,6 @@ public class ProductServiceImpl implements ProductService {
 				totalTax=productPrice*0.05*productQuantity;
 			}
 			else {
-				
 				totalTax=productPrice*0.15*productQuantity;
 			}
 		}
@@ -102,7 +98,6 @@ public class ProductServiceImpl implements ProductService {
 		receiptDetails.setProductQuantity(newProduct.getProductQuantity());
 		receiptDetails.setProductUnitPrice(newProduct.getProductUnitPrice());
 		double totalTax=getTotalTax(newProduct);
-		System.out.println(totalTax);
 		receiptDetails.setProductTotalTax(totalTax);
 		double totalPrice=getTotalPrice(newProduct,totalTax);
 		receiptDetails.setProductTotalPrice(totalPrice);
@@ -119,22 +114,16 @@ public class ProductServiceImpl implements ProductService {
 		int existingProductQuantity=existingProduct.getProductQuantity();
 		int newProductQuantity=newProduct.getProductQuantity();
 		int total=existingProductQuantity+newProductQuantity;
-//		System.out.println(total);
 	    existingProduct.setProductQuantity(total); 
 	    ProductDetails productDetails=new ProductDetails();
 	    productDetails.setProductName(existingProduct.getProductName());
 	    productDetails.setProductQuantity(total);
 	    productDetails.setProductUnitPrice(existingProduct.getProductUnitPrice());
 	    ReceiptDetails receipt=setReceiptDetails(productDetails);
-//	    int existingProductTotalTax=getTotalTax(existingProduct);
-//	    existingProduct.setProductTotalTax(existingProductTotalTax);
-//	    int existingProductTotalPrice=getTotalPrice(existingProduct)
-//	    existingProduct.setProductTotalPrice(total);
-	    productRepo.save(receipt);
+	    return productRepo.save(receipt);
 		}
 		else {
 		return productRepo.save(receiptDetails);
 		}
-		return null;
 	}	
 }

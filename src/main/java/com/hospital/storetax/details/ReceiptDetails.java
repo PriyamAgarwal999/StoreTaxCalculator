@@ -15,6 +15,22 @@ public class ReceiptDetails{
 	private double productUnitPrice;
 	private double productTotalPrice;
 	private double productTotalTax;
+	public ReceiptDetails() {
+		this.productName=null;
+		this.productQuantity=0;
+		this.productTotalPrice=0;
+		this.productTotalTax=0;
+		this.productUnitPrice=0;
+	}
+	public ReceiptDetails(String productName, int productQuantity, double productUnitPrice, double productTotalPrice,
+			double productTotalTax) {
+		super();
+		this.productName = productName;
+		this.productQuantity = productQuantity;
+		this.productUnitPrice = productUnitPrice;
+		this.productTotalPrice = productTotalPrice;
+		this.productTotalTax = productTotalTax;
+	}
 	public String getProductName() {
 		return productName;
 	}

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hospital.storetax.constants.Constants;
 import com.hospital.storetax.details.ProductDetails;
 import com.hospital.storetax.details.ProductSummary;
 import com.hospital.storetax.details.ReceiptDetails;
@@ -31,8 +32,10 @@ public class StoreTaxController {
 	//To add new product
 	@PostMapping("/addproduct")
 	public String addProduct(@RequestBody ProductDetails newProduct){
+		Constants constant=new Constants();
 		productService.addProduct(newProduct);
-		return "Product Added!!";
+		
+		return constant.getProductSuccessResponse();
 	}
 	
 	//to update details of the product
