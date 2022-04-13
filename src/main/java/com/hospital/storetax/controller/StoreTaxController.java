@@ -3,6 +3,7 @@ package com.hospital.storetax.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +36,7 @@ public class StoreTaxController {
 		Constants constant=new Constants();
 		productService.addProduct(newProduct);
 		
-		return constant.getProductSuccessResponse();
+		return constant.getProductAddedSuccessResponse();
 	}
 	
 	//to update details of the product
@@ -51,4 +52,10 @@ public class StoreTaxController {
 		return receiptService.getProductSummary();
 	}
 	
+	@DeleteMapping("/deleteproduct/")
+	public String deleteProduct(@RequestBody ProductDetails deleteProduct) {
+		Constants constant=new Constants();
+		productService.deleteProduct(deleteProduct);
+		return constant.getProductDeletedSuccessResponse();
+	}
 }

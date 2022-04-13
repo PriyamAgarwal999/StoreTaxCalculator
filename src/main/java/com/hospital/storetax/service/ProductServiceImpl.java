@@ -125,5 +125,12 @@ public class ProductServiceImpl implements ProductService {
 		else {
 		return productRepo.save(receiptDetails);
 		}
+	}
+
+	@Override
+	public void deleteProduct(ProductDetails deleteProduct) {
+		// TODO Auto-generated method stub
+		ReceiptDetails receipt=productRepo.getByProductName(deleteProduct.getProductName());
+		productRepo.delete(receipt);
 	}	
 }

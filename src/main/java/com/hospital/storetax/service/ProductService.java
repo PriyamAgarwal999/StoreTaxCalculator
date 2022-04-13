@@ -12,4 +12,6 @@ public interface ProductService {
 //	public void deleteProduct(int productId);
 
 	List<ReceiptDetails> getAllProducts();
+
+	public void deleteProduct(ProductDetails deleteProduct);
 }
