@@ -7,8 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hospital.storetax.dao.ProductRepo;
+import com.hospital.storetax.details.Product;
 import com.hospital.storetax.details.ProductDetails;
-import com.hospital.storetax.details.ReceiptDetails;
+import com.hospital.storetax.details.ProductSummary;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -23,13 +24,23 @@ public class ProductServiceImpl implements ProductService {
 	List<String> foodProducts= new ArrayList<>(Arrays.asList("Chocolate","Biscuits","Ice Cream"));
 	
 	//Function to check if product is food item or not
-    public boolean checkIsProductFood(String productName){ //To prevent multiple dots i.e receipt.foodProducts.contains(productName)
-        return foodProducts.contains(productName);
+    public boolean checkIsProductFood(String productName){ 
+        for(String foodProduct:foodProducts) {
+        	if(productName.contains(foodProduct)) {
+        		return true;
+        	}
+        }
+        return false;
     }
 
     //Function to check if product is medical item or not
     public boolean checkIsProductMedical(String productName){
-        return medicalProducts.contains(productName);
+        for(String medicalProduct:medicalProducts) {
+        	if(productName.contains(medicalProduct)) {
+        		return true;
+        	}
+        }
+        return false;
     }
     
     //Function to check if product is book or not
@@ -43,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
     }
     
     public boolean isProductPresent(String productName){
-    	ReceiptDetails product= productRepo.getByProductName(productName);
+    	ProductDetails product= productRepo.getByProductName(productName);
     	return product!=null;
     }
 	
@@ -80,57 +91,85 @@ public class ProductServiceImpl implements ProductService {
 		return totalPrice;
 	}
 	
-	  public boolean isProductPresent(ReceiptDetails newProduct){
+	  public boolean isProductPresent(ProductDetails newProduct){
 	    	return productRepo.existsByProductName(newProduct.getProductName());
 	    }
 	  
 
 	@Override
-	public List<ReceiptDetails> getAllProducts() {
+	public List<Product> getAllProducts() {
 		// TODO Auto-generated method stub
-		return productRepo.findAll();
+		List<ProductDetails> products = productRepo.findAll();
+		List<Product> productList=new ArrayList<Product>();
+		for(ProductDetails product:products) {
+			Product addProduct=new Product();
+			addProduct.setProductName(product.getProductName());
+			addProduct.setProductQuantity(product.getProductQuantity());
+			addProduct.setProductUnitPrice(product.getProductUnitPrice());
+			addProduct.setTotalTax(getTotalTax(product));
+			addProduct.setTotalPrice(getTotalPrice(product,getTotalTax(product)));
+			productList.add(addProduct);
+		}
+		return productList;
 	}
 	
-	public ReceiptDetails setReceiptDetails(ProductDetails newProduct) {
-		ReceiptDetails receiptDetails=new ReceiptDetails();
+	public ProductDetails setProductDetails(ProductDetails newProduct) {
+		ProductDetails product=new ProductDetails();
 		String productName=newProduct.getProductName();
-		receiptDetails.setProductName(productName);
-		receiptDetails.setProductQuantity(newProduct.getProductQuantity());
-		receiptDetails.setProductUnitPrice(newProduct.getProductUnitPrice());
-		double totalTax=getTotalTax(newProduct);
-		receiptDetails.setProductTotalTax(totalTax);
-		double totalPrice=getTotalPrice(newProduct,totalTax);
-		receiptDetails.setProductTotalPrice(totalPrice);
-		return receiptDetails;
+		product.setProductName(productName);
+		product.setProductQuantity(newProduct.getProductQuantity());
+		product.setProductUnitPrice(newProduct.getProductUnitPrice());
+		return product;
 	}
 
 	@Override
-	public ReceiptDetails addProduct(ProductDetails newProduct) {
-		ReceiptDetails receiptDetails=setReceiptDetails(newProduct);
-		
+	public ProductDetails addProduct(ProductDetails newProduct) {
 //		// TODO Auto-generated method stub
-		if(isProductPresent(receiptDetails)==true) {	
-		ReceiptDetails existingProduct=productRepo.getByProductName(newProduct.getProductName());
+		if(isProductPresent(newProduct.getProductName())==true) {	
+		ProductDetails existingProduct=productRepo.getByProductName(newProduct.getProductName());
 		int existingProductQuantity=existingProduct.getProductQuantity();
 		int newProductQuantity=newProduct.getProductQuantity();
 		int total=existingProductQuantity+newProductQuantity;
 	    existingProduct.setProductQuantity(total); 
-	    ProductDetails productDetails=new ProductDetails();
-	    productDetails.setProductName(existingProduct.getProductName());
-	    productDetails.setProductQuantity(total);
-	    productDetails.setProductUnitPrice(existingProduct.getProductUnitPrice());
-	    ReceiptDetails receipt=setReceiptDetails(productDetails);
-	    return productRepo.save(receipt);
+	    return productRepo.save(existingProduct);
 		}
 		else {
-		return productRepo.save(receiptDetails);
+		return productRepo.save(newProduct);
 		}
 	}
 
 	@Override
+	public ProductSummary getProductSummary() {
+		ProductSummary productFinalReceipt=new ProductSummary();
+		List<ProductDetails> products = productRepo.findAll();
+		List<Product> productList=new ArrayList<Product>();
+		double totalPrice = 0;
+		double totalTax=0;
+		for(ProductDetails product : products){
+			Product newProduct=new Product();
+			newProduct.setProductName(product.getProductName());
+			newProduct.setProductQuantity(product.getProductQuantity());
+			newProduct.setProductUnitPrice(product.getProductUnitPrice());
+			double tax=getTotalTax(product);
+			double price=getTotalPrice(product,tax);
+			newProduct.setTotalPrice(price);
+			newProduct.setTotalTax(tax);
+			productList.add(newProduct);
+			totalPrice+=price;
+			totalTax+=tax;
+		}
+		totalPrice=(totalPrice*100)/100.00;
+		productFinalReceipt.setTotalPrice(totalPrice);
+		productFinalReceipt.setTotalTax(totalTax);
+		productFinalReceipt.setProducts(productList);
+		productFinalReceipt.setGrossPrice(totalPrice-totalTax);
+		return productFinalReceipt;
+	}
+	
+	@Override
 	public void deleteProduct(ProductDetails deleteProduct) {
 		// TODO Auto-generated method stub
-		ReceiptDetails receipt=productRepo.getByProductName(deleteProduct.getProductName());
+		ProductDetails receipt=productRepo.getByProductName(deleteProduct.getProductName());
 		productRepo.delete(receipt);
 	}	
 }

@@ -1,30 +1,24 @@
 package com.hospital.storetax.details;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
-public class ProductDetails {
-
-	@Id
-	@Column(name="productName",length=20)
-	private String productName;
+public class Product {
+	
+private String productName;
 	
 	private int productQuantity;
 	private double productUnitPrice;
-	
-	public ProductDetails() {
-		this.productName=null;
-		this.productQuantity=0;
-		this.productUnitPrice=0;
+	private double totalTax;
+	private double totalPrice;
+	public Product() {
+		
 	}
-	
-	public ProductDetails(String productName, int productQuantity, double productUnitPrice) {
+	public Product(String productName, int productQuantity, double productUnitPrice, double totalTax,
+			double totalPrice) {
 		super();
 		this.productName = productName;
 		this.productQuantity = productQuantity;
 		this.productUnitPrice = productUnitPrice;
+		this.totalTax = totalTax;
+		this.totalPrice = totalPrice;
 	}
 	public String getProductName() {
 		return productName;
@@ -43,5 +37,17 @@ public class ProductDetails {
 	}
 	public void setProductUnitPrice(double productUnitPrice) {
 		this.productUnitPrice = productUnitPrice;
+	}
+	public double getTotalTax() {
+		return totalTax;
+	}
+	public void setTotalTax(double totalTax) {
+		this.totalTax = totalTax;
+	}
+	public double getTotalPrice() {
+		return totalPrice;
+	}
+	public void setTotalPrice(double totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 }

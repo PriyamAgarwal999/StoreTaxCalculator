@@ -1,11 +1,9 @@
 package com.hospital.storetax;
 
-import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -16,7 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.hospital.storetax.details.ReceiptDetails;
+
+import com.hospital.storetax.details.Product;
 import com.hospital.storetax.details.ProductDetails;
 import com.hospital.storetax.dao.ProductRepo;
 import com.hospital.storetax.service.ProductServiceImpl;
@@ -30,15 +29,14 @@ public class ServiceMockitoTests {
 	@InjectMocks
 	ProductServiceImpl productServiceImpl;
 	
-	public List<ReceiptDetails> receipt;
 	
 	@Test
 	@Order(1)
 	public void testGetAllProducts() {
-		List<ReceiptDetails> receipt=new ArrayList<ReceiptDetails>();
-		receipt.add(new ReceiptDetails("Book",1,45,45,2));
-		receipt.add(new ReceiptDetails("CD", 1, 60, 60, 2));
-		when(productRepo.findAll()).thenReturn(receipt);
+		List<ProductDetails> productList=new ArrayList<ProductDetails>();
+		productList.add(new ProductDetails("Book",1,45));
+		productList.add(new ProductDetails("CD", 1, 60));
+		when(productRepo.findAll()).thenReturn(productList);
 		assertEquals(2,productServiceImpl.getAllProducts().size());
 	}
 	
@@ -68,24 +66,23 @@ public class ServiceMockitoTests {
 	@Test
 	@Order(4)
 	public void test_isProductPresent() {
-		ReceiptDetails receipt=new ReceiptDetails("Book",1,45,45,2);
+		ProductDetails product=new ProductDetails("Book",1,45);
 		String productName="Book";
-		when(productRepo.getByProductName(productName)).thenReturn(receipt);
+		when(productRepo.getByProductName(productName)).thenReturn(product);
 		assertTrue(productServiceImpl.isProductPresent(productName));
 	}
 	
 	@Test
 	@Order(5)
-	public void test_setReceiptDetails() {
-		ProductDetails product= new ProductDetails("Imported Perfume",2,50);
-		ReceiptDetails receipt=new ReceiptDetails("Imported Perfume",2,50,115,15);
+	public void setProductDetails() {
+		ProductDetails productDetails= new ProductDetails("Imported Perfume",2,50);
+		Product product=new Product("Imported Perfume",2,50,15,115);
 		assertAll(
-		() -> assertEquals(receipt.getProductName(),productServiceImpl.setReceiptDetails(product).getProductName()),
-		() -> assertEquals(receipt.getProductQuantity(),productServiceImpl.setReceiptDetails(product).getProductQuantity()),
-		() -> assertEquals(receipt.getProductTotalPrice(),productServiceImpl.setReceiptDetails(product).getProductTotalPrice()),
-		() -> assertEquals(receipt.getProductTotalTax(),productServiceImpl.setReceiptDetails(product).getProductTotalTax()),
-		() -> assertEquals(receipt.getProductUnitPrice(),productServiceImpl.setReceiptDetails(product).getProductUnitPrice())
+		() -> assertEquals(product.getProductName(),productServiceImpl.setProductDetails(productDetails).getProductName()),
+		() -> assertEquals(product.getProductQuantity(),productServiceImpl.setProductDetails(productDetails).getProductQuantity()),
+		() -> assertEquals(product.getProductUnitPrice(),productServiceImpl.setProductDetails(productDetails).getProductUnitPrice())
 		);
 	}
 	
+
 }

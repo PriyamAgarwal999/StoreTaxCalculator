@@ -3,17 +3,16 @@ package com.hospital.storetax.details;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
 
 public class ProductSummary {
-	List<ReceiptDetails> products= new ArrayList<ReceiptDetails>();
+	List<Product> products= new ArrayList<Product>();
 	private double totalPrice;
 	private double totalTax;
 	private double grossPrice;
-	public List<ReceiptDetails> getProducts() {
+	public List<Product> getProducts() {
 		return products;
 	}
-	public void setProducts(List<ReceiptDetails> products) {
+	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
 	public double getTotalPrice() {

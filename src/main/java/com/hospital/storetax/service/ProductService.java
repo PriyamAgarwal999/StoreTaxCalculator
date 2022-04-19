@@ -1,17 +1,16 @@
 package com.hospital.storetax.service;
 import java.util.List;
-import java.util.Optional;
-
+import com.hospital.storetax.details.Product;
 import com.hospital.storetax.details.ProductDetails;
-import com.hospital.storetax.details.ReceiptDetails;
+import com.hospital.storetax.details.ProductSummary;
 
 public interface ProductService {
 	
-	public ReceiptDetails addProduct(ProductDetails newProduct);
+	public ProductDetails addProduct(ProductDetails newProduct);
 //	public ProductDetails updateProduct(ProductDetails updateProduct);
 //	public void deleteProduct(int productId);
 
-	List<ReceiptDetails> getAllProducts();
-
+	List<Product> getAllProducts();
+	public ProductSummary getProductSummary(); 
 	public void deleteProduct(ProductDetails deleteProduct);
 }
