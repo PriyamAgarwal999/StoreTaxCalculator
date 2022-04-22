@@ -113,14 +113,6 @@ public class ProductServiceImpl implements ProductService {
 		return productList;
 	}
 	
-	public ProductDetails setProductDetails(ProductDetails newProduct) {
-		ProductDetails product=new ProductDetails();
-		String productName=newProduct.getProductName();
-		product.setProductName(productName);
-		product.setProductQuantity(newProduct.getProductQuantity());
-		product.setProductUnitPrice(newProduct.getProductUnitPrice());
-		return product;
-	}
 
 	@Override
 	public ProductDetails addProduct(ProductDetails newProduct) {
@@ -167,9 +159,22 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
-	public void deleteProduct(ProductDetails deleteProduct) {
+	public void deleteProduct(String deleteProductName) {
 		// TODO Auto-generated method stub
-		ProductDetails receipt=productRepo.getByProductName(deleteProduct.getProductName());
+		ProductDetails receipt=productRepo.getByProductName(deleteProductName);
 		productRepo.delete(receipt);
+	}
+
+	@Override
+	public ProductDetails updateProduct(ProductDetails updateProduct) {
+		if(isProductPresent(updateProduct.getProductName())==true) {
+			ProductDetails existingProduct=productRepo.getByProductName(updateProduct.getProductName());
+			existingProduct.setProductQuantity(updateProduct.getProductQuantity());
+			existingProduct.setProductUnitPrice(updateProduct.getProductUnitPrice());
+			return productRepo.save(existingProduct);
+		}
+		else {
+			return productRepo.save(updateProduct);
+		}
 	}	
 }

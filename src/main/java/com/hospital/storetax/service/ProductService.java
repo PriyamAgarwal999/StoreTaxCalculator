@@ -12,5 +12,6 @@ public interface ProductService {
 
 	List<Product> getAllProducts();
 	public ProductSummary getProductSummary(); 
-	public void deleteProduct(ProductDetails deleteProduct);
+	public void deleteProduct(String deleteProductName);
+	public ProductDetails updateProduct(ProductDetails updateProduct);
 }

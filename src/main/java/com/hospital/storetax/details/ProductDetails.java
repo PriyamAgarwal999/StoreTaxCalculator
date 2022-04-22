@@ -1,11 +1,12 @@
 package com.hospital.storetax.details;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class ProductDetails {
+public class ProductDetails{
 
 	@Id
 	@Column(name="productName",length=20)
