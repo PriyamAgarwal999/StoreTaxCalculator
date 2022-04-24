@@ -61,14 +61,17 @@ public class ProductServiceImpl implements ProductService {
     	return product!=null;
     }
 	
-	//Function to get total tax on the product
+	//Function to get total tax on the product, store tax is applied as standard 10% for all items except Book food and medical products
+    //additional 5% imported tax is applied to all imported products
 	public double getTotalTax(ProductDetails newProduct) {
 		double totalTax=0;
 		String productName=newProduct.getProductName();
 		double productPrice=newProduct.getProductUnitPrice();
 		int productQuantity=newProduct.getProductQuantity();
+		//cheking if product is imported or not
 		if(checkIsProductImported(productName)) {
 			productName=productName.substring(9);
+			//checking if imported product is food product or medical product or book
 			if(checkIsProductMedical(productName) || checkIsProductFood(productName) || checkIsProductBook(productName)) {
 				totalTax=productPrice*0.05*productQuantity;
 			}
@@ -77,6 +80,7 @@ public class ProductServiceImpl implements ProductService {
 			}
 		}
 		else {
+			//checking if imported product is not food product or medical product or book.
 			if(!checkIsProductMedical(productName) && !checkIsProductFood(productName) && !checkIsProductBook(productName)) {
 				totalTax=productPrice*0.10*productQuantity;
 			}
@@ -123,6 +127,8 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductDetails addProduct(ProductDetails newProduct) {
 //		// TODO Auto-generated method stub
+		//checking if the product is already present or not
+		//if product is already present then adding the new product quantity to the existing product quantity.
 		if(isProductPresent(newProduct.getProductName())==true) {	
 		ProductDetails existingProduct=productRepo.getByProductName(newProduct.getProductName());
 		int existingProductQuantity=existingProduct.getProductQuantity();
@@ -136,6 +142,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 
+	// function to get the products summary of all the products.
 	@Override
 	public ProductSummary getProductSummary() {
 		ProductSummary productFinalReceipt=new ProductSummary();
@@ -167,6 +174,7 @@ public class ProductServiceImpl implements ProductService {
 		return productFinalReceipt;
 	}
 	
+	//function to delete the product from the records.
 	@Override
 	public void deleteProduct(String deleteProductName) {
 		// TODO Auto-generated method stub
@@ -174,6 +182,7 @@ public class ProductServiceImpl implements ProductService {
 		productRepo.delete(receipt);
 	}
 
+	//function to update the product details of the existing product.
 	@Override
 	public ProductDetails updateProduct(ProductDetails updateProduct) {
 		if(isProductPresent(updateProduct.getProductName())==true) {
