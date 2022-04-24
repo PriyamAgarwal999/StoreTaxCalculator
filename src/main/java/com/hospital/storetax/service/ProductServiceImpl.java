@@ -54,6 +54,9 @@ public class ProductServiceImpl implements ProductService {
     }
     
     public boolean isProductPresent(String productName){
+    	if (productName == null || productName.trim().isEmpty()) {
+    		throw new IllegalArgumentException("the product name can not be null or empty");
+    		}
     	ProductDetails product= productRepo.getByProductName(productName);
     	return product!=null;
     }
@@ -100,6 +103,9 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> getAllProducts() {
 		// TODO Auto-generated method stub
 		List<ProductDetails> products = productRepo.findAll();
+		if(products.isEmpty()) {
+			throw new NullPointerException("Repository is Empty");
+		}
 		List<Product> productList=new ArrayList<Product>();
 		for(ProductDetails product:products) {
 			Product addProduct=new Product();
@@ -134,6 +140,9 @@ public class ProductServiceImpl implements ProductService {
 	public ProductSummary getProductSummary() {
 		ProductSummary productFinalReceipt=new ProductSummary();
 		List<ProductDetails> products = productRepo.findAll();
+		if(products.isEmpty()) {
+			throw new NullPointerException("Repository is Empty");
+		}
 		List<Product> productList=new ArrayList<Product>();
 		double totalPrice = 0;
 		double totalTax=0;
