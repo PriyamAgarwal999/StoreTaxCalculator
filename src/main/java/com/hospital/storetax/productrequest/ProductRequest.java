@@ -4,7 +4,7 @@ import com.hospital.storetax.details.ProductDetails;
 
 public class ProductRequest {
 	private String requestType;
-	ProductDetails product=new ProductDetails();
+	ProductDetails product;
 
 	public String getRequestType() {
 		return requestType;

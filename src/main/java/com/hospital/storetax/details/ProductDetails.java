@@ -27,7 +27,7 @@ public class ProductDetails{
 		this.productQuantity = productQuantity;
 		this.productUnitPrice = productUnitPrice;
 	}
-	public String getProductName() {
+	public String getProductName(){
 		return productName;
 	}
 	public void setProductName(String productName) {
