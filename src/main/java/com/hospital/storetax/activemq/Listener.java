@@ -25,8 +25,6 @@ public class Listener {
 		ProductRequest product=gson.fromJson(message,ProductRequest.class);
 		System.out.println(product.getRequestType());
 		if(product.getRequestType().equals("Add")) {
-			System.out.println("Hello");
-			System.out.println(product.getProduct().getProductName());
 			productService.addProduct(product.getProduct());
 		}
 		if(product.getRequestType().equals("Delete")) {

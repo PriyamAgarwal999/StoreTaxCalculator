@@ -14,7 +14,7 @@ public class ProductDetails{
 	
 	private int productQuantity;
 	private double productUnitPrice;
-	
+
 	public ProductDetails() {
 		this.productName=null;
 		this.productQuantity=0;
@@ -27,6 +27,7 @@ public class ProductDetails{
 		this.productQuantity = productQuantity;
 		this.productUnitPrice = productUnitPrice;
 	}
+	
 	public String getProductName(){
 		return productName;
 	}
@@ -45,4 +46,6 @@ public class ProductDetails{
 	public void setProductUnitPrice(double productUnitPrice) {
 		this.productUnitPrice = productUnitPrice;
 	}
+	
+	
 }

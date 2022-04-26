@@ -39,6 +39,7 @@ public class StoreTaxController {
 		return constant.getProductAddedSuccessResponse();
 	}
 	
+	
 	@PutMapping("/updateproduct/")
 	public String updateProduct(@RequestBody ProductDetails updateProduct) {
 		Constants constant=new Constants();
